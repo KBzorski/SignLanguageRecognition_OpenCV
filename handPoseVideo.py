@@ -29,6 +29,10 @@ vid_writer = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc('M','J','P','G'
 
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 k = 0
+
+cv2.namedWindow('Output-Skeleton', cv2.WINDOW_NORMAL)
+
+
 while 1:
     k+=1
     t = time.time()
