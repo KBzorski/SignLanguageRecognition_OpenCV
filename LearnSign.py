@@ -80,7 +80,7 @@ def getFeatureVector(points):
             FeatureVector.append(math.sqrt((points[partA][0]-points[partB][0])^2+(points[partA][1]-points[partB][1])^2)/maxLen)
 
 
-        FeatureVector.append(math.atan2(dy, dx))
+        FeatureVector.append(math.atan2(dy, dx)) #obliczanie kątów pomiędzy elementami
         #for i in range(22):
             #points[i]=
 
