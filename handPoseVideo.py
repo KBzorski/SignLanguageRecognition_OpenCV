@@ -1,7 +1,7 @@
 import cv2
 import time
 import numpy as np
-
+import LearnSign as SL
 
 protoFile = "HandModel/pose_deploy.prototxt"
 weightsFile = "HandModel/pose_iter_102000.caffemodel"
@@ -10,15 +10,25 @@ POSE_PAIRS = [ [0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,
 
 threshold = 0.2
 
+font                   = cv2.FONT_HERSHEY_SIMPLEX
+bottomLeftCornerOfText = (10,500)
+fontScale              = 1.5
+fontColor              = (255,255,255)
+#fontColor              = (0,0,0)
+lineType               = 2
+
+
 
 #input_source = "asl.mp4"
 input_source = "AlphabetVideo.avi"
-cap = cv2.VideoCapture(input_source) #for video input
-#cap=cv2.VideoCapture(0) #for camera input
+#cap = cv2.VideoCapture(input_source) #for video input
+cap=cv2.VideoCapture(0) #for camera input
 hasFrame, frame = cap.read()
 
 frameWidth = frame.shape[1]
 frameHeight = frame.shape[0]
+
+bottomLeftCornerOfText=(int(frameWidth*0.5),int(frameHeight*0.75))
 
 aspect_ratio = frameWidth/frameHeight
 
@@ -32,6 +42,7 @@ k = 0
 
 cv2.namedWindow('Output-Skeleton', cv2.WINDOW_NORMAL)
 
+FeatureVectors=SL.loadVectors("FVectors")
 
 while 1:
     k+=1
@@ -85,6 +96,11 @@ while 1:
 
     # cv2.putText(frame, "time taken = {:.2f} sec".format(time.time() - t), (50, 50), cv2.FONT_HERSHEY_COMPLEX, .8, (255, 50, 0), 2, lineType=cv2.LINE_AA)
     # cv2.putText(frame, "Hand Pose using OpenCV", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 50, 0), 2, lineType=cv2.LINE_AA)
+
+    Identification=SL.signIdentification(SL.getFeatureVector(points),FeatureVectors)
+    cv2.putText(frame, Identification[0],bottomLeftCornerOfText, font, fontScale,fontColor,lineType)
+    print(Identification[0]," - Similarity: ",Identification[1])
+
     cv2.imshow('Output-Skeleton', frame)
     # cv2.imwrite("video_output/{:03d}.jpg".format(k), frame)
     key = cv2.waitKey(1)

@@ -19,8 +19,6 @@ Learn_pairs = [[2,4],[1,3],[5,7],[6,8],[9,11],[10,12],[13,15],[14,16],[17,19],[1
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 
-
-
 def getPointsFromPicture(path):
     frame = cv2.imread(path)
 
@@ -88,6 +86,8 @@ def getFeatureVector(points):
 
         if points[partA] and points[partB]:
             FeatureVector.append(math.sqrt((points[partA][0]-points[partB][0])**2+(points[partA][1]-points[partB][1])**2)/maxLen)
+        else:
+            FeatureVector.append(0)
 
 
         #FeatureVector.append(math.atan2(dy, dx)) #obliczanie kątów pomiędzy elementami
@@ -127,28 +127,33 @@ FeatureVectors=loadVectors("FVectors")
 
 
 def signIdentification(present_Vector,FeatureVectors):
-    max =0
+    maxSi =0
     sign=""
 
     B=present_Vector
 
     for Vector in FeatureVectors:
         A=Vector[0]
-        print(A)
+        #print(A)
+        #print(len(A))
         try:
             Similarity = 1 - spatial.distance.cosine(A, B)
         except:
             print("Czegoś brakuje")
             Similarity=0;
-        if Similarity>max:
-            max=Similarity
+        if Similarity>maxSi:
+            maxSi=Similarity
             sign=Vector[1]
-    return sign
+        #print("Prawdopodobieństwo:",Vector[1],": ",Similarity)
+
+    if maxSi<0.7:
+        sign=""
+    return sign, maxSi
 
 path="Numbers/2.png"
 #path="Alphabet/B.png"
-path="Test/TestV.png"
-print(signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors))
+path="Test/TestL.png"
+#print(signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors))
 
 
 

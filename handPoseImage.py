@@ -2,6 +2,8 @@ from __future__ import division
 import cv2
 import time
 import numpy as np
+import LearnSign as SL
+from scipy import spatial
 
 protoFile = "HandModel/pose_deploy.prototxt"
 weightsFile = "HandModel/pose_iter_102000.caffemodel"
@@ -11,9 +13,9 @@ net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 #frame = cv2.imread("right-frontal.jpg")
 #frame= cv2.imread("test.jpg")
-#frame = cv2.imread("Alphabet/W.png")
+frame = cv2.imread("Alphabet/Y.png")
 #frame = cv2.imread("Numbers/5.png")
-frame= cv2.imread("Test/TestL.png")
+#frame= cv2.imread("Test/TestR.png")
 
 frameCopy = np.copy(frame)
 frameWidth = frame.shape[1]
@@ -74,5 +76,5 @@ cv2.imwrite('Output-Keypoints.jpg', frameCopy)
 cv2.imwrite('Output-Skeleton.jpg', frame)
 
 print("Total time taken : {:.3f}".format(time.time() - t))
-
 cv2.waitKey(0)
+
