@@ -144,7 +144,7 @@ def signIdentification(present_Vector,FeatureVectors):
         if Similarity>maxSi:
             maxSi=Similarity
             sign=Vector[1]
-        #print("Prawdopodobieństwo:",Vector[1],": ",Similarity)
+        print("Prawdopodobieństwo:",Vector[1],": ",Similarity)
 
     if maxSi<0.7:
         sign=""
@@ -152,8 +152,8 @@ def signIdentification(present_Vector,FeatureVectors):
 
 path="Numbers/2.png"
 #path="Alphabet/B.png"
-path="Test/TestL.png"
-#print(signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors))
+path="Test/TestV.png"
+print(signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors))
 
 
 

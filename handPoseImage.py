@@ -13,8 +13,8 @@ net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 #frame = cv2.imread("right-frontal.jpg")
 #frame= cv2.imread("test.jpg")
-frame = cv2.imread("Alphabet/Y.png")
-#frame = cv2.imread("Numbers/5.png")
+frame = cv2.imread("Alphabet/R.png")
+#frame = cv2.imread("Numbers/2.png")
 #frame= cv2.imread("Test/TestR.png")
 
 frameCopy = np.copy(frame)
