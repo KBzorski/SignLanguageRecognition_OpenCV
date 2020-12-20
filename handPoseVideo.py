@@ -45,6 +45,7 @@ cv2.namedWindow('Output-Skeleton', cv2.WINDOW_NORMAL)
 FeatureVectors=SL.loadVectors("FVectors")
 
 while 1:
+    complex_sign=0
     k+=1
     t = time.time()
     hasFrame, frame = cap.read()
@@ -98,7 +99,26 @@ while 1:
     # cv2.putText(frame, "Hand Pose using OpenCV", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 50, 0), 2, lineType=cv2.LINE_AA)
 
     Identification=SL.signIdentification(SL.getFeatureVector(points),FeatureVectors)
-    cv2.putText(frame, Identification[0],bottomLeftCornerOfText, font, fontScale,fontColor,lineType)
+    if(Identification[0][-2]=="_"):
+        if(complex_sign==Identification[0][-1]):
+            pass
+        elif(complex_sign==0 and Identification[0][-1]==1):
+            complex_sign=1
+        elif (complex_sign == 1 and Identification[0][-1] == 2):
+            complex_sign = 2
+        elif (complex_sign == 2 and Identification[0][-1] == 3):
+            complex_sign = 3
+        elif (complex_sign == 3 and Identification[0][-1] == 4):
+            complex_sign = 4
+        elif (complex_sign == 4 and Identification[0][-1] == 5):
+            complex_sign = 5
+    elif(complex_sign>1):
+        Identification[0]=Identification[0][:-2]
+        complex_sign=0
+        cv2.putText(frame, Identification[0], bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
+    else:
+        cv2.putText(frame, Identification[0], bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
+    #cv2.putText(frame, Identification[0],bottomLeftCornerOfText, font, fontScale,fontColor,lineType)
     print(Identification[0]," - Similarity: ",Identification[1])
 
     cv2.imshow('Output-Skeleton', frame)
