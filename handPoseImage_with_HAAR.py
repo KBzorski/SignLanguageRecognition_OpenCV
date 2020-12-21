@@ -12,13 +12,25 @@ POSE_PAIRS = [ [0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 
-
+Hand_cascade = cv2.CascadeClassifier('HandModel/Hand.Cascade.xml')
 
 #frame = cv2.imread("right-frontal.jpg")
 #frame= cv2.imread("test.jpg")
 #frame = cv2.imread("Alphabet/R.png")
-#frame = cv2.imread("Numbers/2.png")
-frame= cv2.imread("Test/testR.png")
+frame = cv2.imread("Numbers/2.png")
+#frame= cv2.imread("Test/TestR.png")
+
+
+gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+img = frame
+hands = Hand_cascade.detectMultiScale(gray, 1.3, 5)
+print(hands)
+for (x,y,w,h) in hands:
+    img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+    roi_gray = gray[y:y+h, x:x+w]
+    roi_color = img[y:y+h, x:x+w]
+
+cv2.imshow('img',img)
 
 frameCopy = np.copy(frame)
 frameWidth = frame.shape[1]

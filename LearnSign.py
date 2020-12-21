@@ -71,35 +71,37 @@ def getPointsFromPicture(path):
             cv2.circle(frame, points[partB], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
     return points
 
+
 def getFeatureVector(points):
-    FeatureVector=[]
-    maxLen=0
+    FeatureVector = []
+    maxLen = 0
     if points[2] and points[4]:
-        #print((points[2][0]-points[4][0])**2+(points[2][1]-points[4][1])**2)
-        maxLen=math.sqrt((points[2][0]-points[4][0])**2+(points[2][1]-points[4][1])**2) #Długość kciuka
+        maxLen = math.sqrt((points[2][0]-points[4][0])**2+(points[2][1]-points[4][1])**2)  # Długość kciuka
     else:
-        maxLen=1
+        maxLen = 1
 
     for pair in Learn_pairs:
         partA = pair[0]
         partB = pair[1]
 
         if points[partA] and points[partB]:
-            FeatureVector.append(math.sqrt((points[partA][0]-points[partB][0])**2+(points[partA][1]-points[partB][1])**2)/maxLen)
+            FeatureVector.append(math.sqrt((points[partA][0]-points[partB][0])**2 +
+                                           (points[partA][1]-points[partB][1])**2)/maxLen)
         else:
             FeatureVector.append(0)
-
+    return FeatureVector
 
         #FeatureVector.append(math.atan2(dy, dx)) #obliczanie kątów pomiędzy elementami
         #for i in range(22):
             #points[i]=
 
-    return FeatureVector
+    #return FeatureVector
 
 def createBase():
     allVectors = []
     pathNum="Numbers/*.png"
     pathAlph="Alphabet/*.png"
+    pathWord = "Words/*.png"
     for file in glob.glob(pathNum,recursive = True):
         print(file)
         allVectors.append([getFeatureVector(getPointsFromPicture(file)),os.path.relpath(file, 'Numbers')[:-4]])
@@ -108,6 +110,10 @@ def createBase():
     for file in glob.glob(pathAlph, recursive=True):
         print(file)
         allVectors.append([getFeatureVector(getPointsFromPicture(file)),os.path.relpath(file, 'Alphabet')[:-4]])
+
+    for file in glob.glob(pathWord , recursive=True):
+        print(file)
+        allVectors.append([getFeatureVector(getPointsFromPicture(file)), os.path.relpath(file, 'Word')[:-4]])
 
     print(allVectors)
     with open('FVectors', 'wb') as fp:
@@ -150,19 +156,28 @@ def signIdentification(present_Vector,FeatureVectors):
         sign=""
     return sign, maxSi
 
+"""
 path="Numbers/2.png"
 #path="Alphabet/B.png"
-path="Test/TestV.png"
-print(signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors))
-
-
-
+path="Test/inzW.jpg"
+Iden=signIdentification(getFeatureVector(getPointsFromPicture(path)),FeatureVectors)
+print(Iden)
+pic = cv2.imread(path)
+pic=cv2.resize(pic, (700,1000))
+font                   = cv2.FONT_HERSHEY_SIMPLEX
+bottomLeftCornerOfText = (300,900)
+fontScale              = 5
+fontColor              = (255,255,255)
+lineType               = 2
+cv2.putText(pic, "W", bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
 
 #cv2.namedWindow('Output-Keypoints', cv2.WINDOW_NORMAL)
 #cv2.namedWindow('Output-Skeleton', cv2.WINDOW_NORMAL)
-#cv2.imshow('Output-Keypoints', frameCopy)
+cv2.namedWindow('Wynik rozpoznawania', cv2.WINDOW_NORMAL)
+cv2.imshow('Wynik rozpoznawania', pic)
+cv2.waitKey(0)
 #cv2.imshow('Output-Skeleton', frame)
-
+"""
 
 #cv2.imwrite('Output-Keypoints.jpg', frameCopy)
 #cv2.imwrite('Output-Skeleton.jpg', frame)

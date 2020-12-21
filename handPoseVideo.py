@@ -21,8 +21,8 @@ lineType               = 2
 
 #input_source = "asl.mp4"
 input_source = "AlphabetVideo.avi"
-#cap = cv2.VideoCapture(input_source) #for video input
-cap=cv2.VideoCapture(0) #for camera input
+cap = cv2.VideoCapture(input_source) #for video input
+#cap=cv2.VideoCapture(0) #for camera input
 hasFrame, frame = cap.read()
 
 frameWidth = frame.shape[1]
@@ -42,7 +42,7 @@ k = 0
 
 cv2.namedWindow('Output-Skeleton', cv2.WINDOW_NORMAL)
 
-FeatureVectors=SL.loadVectors("FVectors")
+FeatureVectors=SL.loadVectors("FVectors_old2")
 
 while 1:
     complex_sign=0
@@ -99,6 +99,7 @@ while 1:
     # cv2.putText(frame, "Hand Pose using OpenCV", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 50, 0), 2, lineType=cv2.LINE_AA)
 
     Identification=SL.signIdentification(SL.getFeatureVector(points),FeatureVectors)
+
     if(Identification[0][-2]=="_"):
         if(complex_sign==Identification[0][-1]):
             pass
@@ -118,6 +119,8 @@ while 1:
         cv2.putText(frame, Identification[0], bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
     else:
         cv2.putText(frame, Identification[0], bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
+        
+
     #cv2.putText(frame, Identification[0],bottomLeftCornerOfText, font, fontScale,fontColor,lineType)
     print(Identification[0]," - Similarity: ",Identification[1])
 
